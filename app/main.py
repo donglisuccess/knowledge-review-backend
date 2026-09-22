@@ -22,3 +22,21 @@ def echo(request: EchoRequest):
             "name": request.name
         }
     }
+    
+@app.get("/api/getUserInfo")
+def getUserInfo():
+    return {
+        "code": 0,
+        "data": {
+            # mock数据
+            "name": "张三",
+            "age": 18,
+            "gender": "男",
+            "address": "北京市朝阳区",
+            "phone": "13800138000",
+            "email": "zhangsan@example.com",
+            "avatar": "https://example.com/avatar.jpg",
+            "status": "在线",
+            "lastLoginTime": "2021-01-01 12:00:00"
+        }
+    }
