@@ -23,7 +23,7 @@ jobs:
           source: "app,Dockerfile,requirements.txt"
           target: "/root/fullstack/backend"
 
-      - name: Check uploaded files
+      - name: Deploy backend container
         uses: appleboy/ssh-action@v1
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -31,7 +31,32 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            echo "===== backend files ====="
-            ls -la /root/fullstack/backend
-            echo "===== app files ====="
-            ls -la /root/fullstack/backend/app
+            set -e
+
+            cd /root/fullstack/backend
+
+            echo "===== Check backend files ====="
+            ls -la
+            ls -la app
+
+            echo "===== Build new image ====="
+            docker build -t knowledge-review-backend:latest .
+
+            echo "===== Stop old container ====="
+            docker stop knowledge-review-backend || true
+
+            echo "===== Remove old container ====="
+            docker rm knowledge-review-backend || true
+
+            echo "===== Start new container ====="
+            docker run -d \
+              --name knowledge-review-backend \
+              -p 127.0.0.1:3001:3001 \
+              --restart unless-stopped \
+              knowledge-review-backend:latest
+
+            echo "===== Remove dangling images ====="
+            docker image prune -f
+
+            echo "===== Check container ====="
+            docker ps --filter name=knowledge-review-backend
