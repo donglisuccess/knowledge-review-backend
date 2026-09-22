@@ -29,7 +29,7 @@ def getUserInfo():
         "code": 0,
         "data": {
             # mock数据
-            "name": "张三",
+            "name": "dongli",
             "age": 18,
             "gender": "男",
             "address": "北京市朝阳区",
@@ -40,3 +40,4 @@ def getUserInfo():
             "lastLoginTime": "2021-01-01 12:00:00"
         }
     }
+    
